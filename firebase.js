@@ -1,18 +1,25 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+// Import Firebase modules
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
+// Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "AIzaSyDyzEWR2Bct6EkSBQTLCvkHi4Vzb7oasy4",
+  authDomain: "truecaller-98603.firebaseapp.com",
+  projectId: "truecaller-98603",
+  storageBucket: "truecaller-98603.firebasestorage.app",
+  messagingSenderId: "594765579227",
+  appId: "1:594765579227:web:13db05082163fc3c371dfe",
+  measurementId: "G-MHGXC59RCR"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
-export const auth = getAuth(app);
-export const db = getDatabase(app);
+// Export for use in project
+export { app, analytics, auth, db };
