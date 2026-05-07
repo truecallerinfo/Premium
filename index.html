@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Truecaller Global Intelligence</title>
+    <title>Truecaller Intelligent Hybrid</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .premium-gradient { background: linear-gradient(135deg, #0046ad 0%, #0082fb 100%); }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid #e2e8f0; }
-        .data-label { font-size: 0.75rem; font-weight: bold; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-        .data-value { font-size: 1.1rem; font-weight: 600; color: #1e293b; }
+        .data-label { font-size: 0.7rem; font-weight: bold; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .data-value { font-size: 1rem; font-weight: 600; color: #1e293b; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans">
@@ -23,50 +23,43 @@
         <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-700 transition">Login</button>
     </nav>
 
-    <header class="premium-gradient py-16 px-6 text-center text-white">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4">Search Caller Details</h1>
-        <p class="text-blue-100 mb-8 max-w-xl mx-auto">বিশ্বের যেকোনো প্রান্তের ফোন নম্বরের লোকেশন এবং সিম অপারেটর শনাক্ত করুন সহজেই।</p>
+    <header class="premium-gradient py-12 px-6 text-center text-white">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4">Smart Caller ID</h1>
+        <p class="text-blue-100 mb-8 max-w-xl mx-auto">ডাটাবেস এবং এপিআই-এর সমন্বয়ে নির্ভুল তথ্য।</p>
         
         <div class="max-w-2xl mx-auto flex bg-white rounded-2xl shadow-2xl p-2 overflow-hidden">
-            <input type="text" id="searchInput" placeholder="Enter number with country code (e.g. +88017...)" class="w-full p-4 text-gray-800 outline-none font-medium" />
-            <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg">Search</button>
+            <input type="text" id="searchInput" placeholder="Enter number (e.g. 88017...)" class="w-full p-4 text-gray-800 outline-none font-medium" />
+            <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition">Search</button>
         </div>
 
-        <div id="resultArea" class="max-w-lg mx-auto mt-10 hidden text-left animate-pulse">
-            <div class="glass-card p-8 rounded-3xl shadow-2xl border-t-8 border-blue-500">
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <p class="data-label">Identity Status</p>
-                        <h2 id="displayTitle" class="text-3xl font-black text-slate-900">Identifying...</h2>
-                    </div>
-                    <div id="statusBadge" class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">--</div>
+        <div id="resultArea" class="max-w-lg mx-auto mt-8 hidden text-left">
+            <div class="glass-card p-6 rounded-3xl shadow-2xl border-t-8 border-blue-500">
+                <div class="mb-6">
+                    <p class="data-label">Identified Name</p>
+                    <h2 id="displayTitle" class="text-2xl font-black text-slate-900">Identifying...</h2>
                 </div>
 
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="p-3 bg-slate-50 rounded-xl">
-                        <p class="data-label"><i class="fa-solid fa-earth-americas mr-1"></i> Location</p>
-                        <p id="resLocation" class="data-value">--</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-white/50 rounded-xl">
+                        <p class="data-label"><i class="fa-solid fa-location-dot"></i> Location</p>
+                        <p id="resLocation" class="data-value text-sm">--</p>
                     </div>
-                    <div class="p-3 bg-slate-50 rounded-xl">
-                        <p class="data-label"><i class="fa-solid fa-tower-cell mr-1"></i> Carrier</p>
-                        <p id="resCarrier" class="data-value">--</p>
+                    <div class="p-3 bg-white/50 rounded-xl">
+                        <p class="data-label"><i class="fa-solid fa-signal"></i> Carrier</p>
+                        <p id="resCarrier" class="data-value text-sm">--</p>
                     </div>
-                    <div class="p-3 bg-slate-50 rounded-xl">
-                        <p class="data-label"><i class="fa-solid fa-clock mr-1"></i> Timezone</p>
-                        <p id="resTime" class="data-value">--</p>
+                    <div class="p-3 bg-white/50 rounded-xl">
+                        <p class="data-label"><i class="fa-solid fa-globe"></i> Country</p>
+                        <p id="resCountry" class="data-value text-sm">--</p>
                     </div>
-                    <div class="p-3 bg-slate-50 rounded-xl">
-                        <p class="data-label"><i class="fa-solid fa-shield-check mr-1"></i> Risk Level</p>
-                        <p id="resRisk" class="data-value">--</p>
+                    <div class="p-3 bg-white/50 rounded-xl">
+                        <p class="data-label"><i class="fa-solid fa-shield"></i> Status</p>
+                        <p id="resStatus" class="data-value text-sm">--</p>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-
-    <footer class="mt-20 py-8 border-t border-slate-200 text-center text-slate-400 text-xs">
-        <p>© 2026 Md. Dulal Hosen | Powered by Abstract API & Firebase</p>
-    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -88,66 +81,62 @@
         const db = getDatabase(app);
         const provider = new GoogleAuthProvider();
 
-        // Abstract API Key (Updated)
         const API_KEY = "830c25a589574221976a21306f477022"; 
 
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
         const resultArea = document.getElementById('resultArea');
         const displayTitle = document.getElementById('displayTitle');
-        const loginBtn = document.getElementById('loginBtn');
-
-        loginBtn.addEventListener('click', () => {
-            signInWithPopup(auth, provider).then((result) => {
-                loginBtn.innerText = result.user.displayName;
-                alert("Login successful!");
-            });
-        });
 
         searchBtn.addEventListener('click', async () => {
-            const number = searchInput.value.trim().replace(/\s/g, '');
-            if (!number) return alert("Please enter a phone number!");
+            // নম্বর ক্লিনআপ (প্লাস এবং স্পেস সরানো)
+            let number = searchInput.value.trim().replace(/\+/g, '').replace(/\s/g, '');
+            if (!number) return alert("Please enter a number");
 
             resultArea.classList.remove('hidden');
-            resultArea.classList.add('animate-pulse');
             displayTitle.innerText = "Searching...";
+            resetFields();
 
             try {
-                // 1. Firebase Search (Local DB)
+                // ১. Firebase থেকে নাম খোঁজা
                 const dbRef = ref(db);
                 const snapshot = await get(child(dbRef, `numbers/${number}`));
                 
-                let foundName = snapshot.exists() ? snapshot.val().name : "Global Caller";
+                if (snapshot.exists()) {
+                    displayTitle.innerText = snapshot.val().name;
+                } else {
+                    displayTitle.innerText = "Unknown Caller";
+                }
 
-                // 2. Global Search (Abstract API)
+                // ২. এপিআই থেকে লোকেশন/অপারেটর তথ্য আনা
                 const apiRes = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${API_KEY}&phone=${number}`);
                 const data = await apiRes.json();
 
-                resultArea.classList.remove('animate-pulse');
-
                 if(data.phone_number) {
-                    displayTitle.innerText = foundName;
-                    document.getElementById('resLocation').innerText = `${data.phone_location.city || 'N/A'}, ${data.phone_location.country_name}`;
-                    document.getElementById('resCarrier').innerText = data.phone_carrier.name || "Unknown Carrier";
-                    document.getElementById('resTime').innerText = data.phone_location.timezone;
-                    
-                    const risk = data.phone_risk.risk_level.toUpperCase();
-                    const riskEl = document.getElementById('resRisk');
-                    riskEl.innerText = risk;
-                    riskEl.className = risk === 'LOW' ? 'data-value text-green-600' : 'data-value text-red-600';
-                    
-                    const statusBadge = document.getElementById('statusBadge');
-                    const status = data.phone_validation.line_status.toUpperCase();
-                    statusBadge.innerText = status;
-                    statusBadge.className = status === 'ACTIVE' ? 'bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold' : 'bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold';
+                    document.getElementById('resLocation').innerText = data.phone_location.city || "Not Found";
+                    document.getElementById('resCountry').innerText = data.phone_location.country_name || "N/A";
+                    document.getElementById('resCarrier').innerText = data.phone_carrier.name || "N/A";
+                    document.getElementById('resStatus').innerText = data.phone_validation.line_status.toUpperCase();
                 } else {
-                    displayTitle.innerText = "Invalid Number";
+                    alert("এপিআই এই নম্বরের তথ্য খুঁজে পায়নি।");
                 }
-
-            } catch (error) {
-                console.error(error);
+            } catch (e) {
                 displayTitle.innerText = "Error Searching";
+                console.error(e);
             }
+        });
+
+        function resetFields() {
+            document.getElementById('resLocation').innerText = "--";
+            document.getElementById('resCountry').innerText = "--";
+            document.getElementById('resCarrier').innerText = "--";
+            document.getElementById('resStatus').innerText = "--";
+        }
+
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            signInWithPopup(auth, provider).then((r) => {
+                document.getElementById('loginBtn').innerText = r.user.displayName;
+            });
         });
     </script>
 </body>
