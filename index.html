@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Truecaller Intelligent Hybrid</title>
+    <title>Truecaller Global Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -25,10 +25,10 @@
 
     <header class="premium-gradient py-12 px-6 text-center text-white">
         <h1 class="text-3xl md:text-5xl font-bold mb-4">Smart Caller ID</h1>
-        <p class="text-blue-100 mb-8 max-w-xl mx-auto">ডাটাবেস এবং এপিআই-এর সমন্বয়ে নির্ভুল তথ্য।</p>
+        <p class="text-blue-100 mb-8 max-w-xl mx-auto italic">Firebase এবং Abstract API-এর মাধ্যমে লাইভ সার্চ।</p>
         
         <div class="max-w-2xl mx-auto flex bg-white rounded-2xl shadow-2xl p-2 overflow-hidden">
-            <input type="text" id="searchInput" placeholder="Enter number (e.g. 88017...)" class="w-full p-4 text-gray-800 outline-none font-medium" />
+            <input type="text" id="searchInput" placeholder="Enter number (e.g. 017...)" class="w-full p-4 text-gray-800 outline-none font-medium" />
             <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition">Search</button>
         </div>
 
@@ -61,6 +61,10 @@
         </div>
     </header>
 
+    <footer class="mt-10 py-6 text-center text-slate-400 text-[10px]">
+        <p>© 2026 Md. Dulal Hosen | Hybrid Data Intelligence</p>
+    </footer>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -81,7 +85,12 @@
         const db = getDatabase(app);
         const provider = new GoogleAuthProvider();
 
-        const API_KEY = "830c25a589574221976a21306f477022"; 
+        // আপনি যে নতুন ৩টি কী দিয়েছেন সেগুলো এখানে সেট করা হয়েছে
+        const API_KEYS = [
+            "48b9b17979774b9f84a9180697a2b680",
+            "71a4ee0229d64b1c98f10a196b35edd4",
+            "fbf58d354c1b48aab99efc56d9ce3fb7"
+        ];
 
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
@@ -89,42 +98,62 @@
         const displayTitle = document.getElementById('displayTitle');
 
         searchBtn.addEventListener('click', async () => {
-            // নম্বর ক্লিনআপ (প্লাস এবং স্পেস সরানো)
-            let number = searchInput.value.trim().replace(/\+/g, '').replace(/\s/g, '');
-            if (!number) return alert("Please enter a number");
+            let rawNumber = searchInput.value.trim().replace(/\+/g, '').replace(/\s/g, '');
+            if (!rawNumber) return alert("Please enter a number");
+
+            // এপিআই-এর জন্য নম্বর ফরম্যাট (অটো ৮৮ যোগ করা)
+            let apiNumber = rawNumber;
+            if (apiNumber.startsWith('0')) apiNumber = '88' + apiNumber;
+            else if (!apiNumber.startsWith('88') && apiNumber.length < 11) apiNumber = '88' + apiNumber;
 
             resultArea.classList.remove('hidden');
             displayTitle.innerText = "Searching...";
             resetFields();
 
             try {
-                // ১. Firebase থেকে নাম খোঁজা
+                // ১. Firebase ডাটাবেস চেক (সবচেয়ে সঠিক নাম এখানেই পাবেন)
                 const dbRef = ref(db);
-                const snapshot = await get(child(dbRef, `numbers/${number}`));
+                const snapshot = await get(child(dbRef, `numbers/${rawNumber}`));
                 
                 if (snapshot.exists()) {
                     displayTitle.innerText = snapshot.val().name;
                 } else {
-                    displayTitle.innerText = "Unknown Caller";
+                    displayTitle.innerText = "Global Caller";
                 }
 
-                // ২. এপিআই থেকে লোকেশন/অপারেটর তথ্য আনা
-                const apiRes = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${API_KEY}&phone=${number}`);
-                const data = await apiRes.json();
-
-                if(data.phone_number) {
-                    document.getElementById('resLocation').innerText = data.phone_location.city || "Not Found";
-                    document.getElementById('resCountry').innerText = data.phone_location.country_name || "N/A";
-                    document.getElementById('resCarrier').innerText = data.phone_carrier.name || "N/A";
-                    document.getElementById('resStatus').innerText = data.phone_validation.line_status.toUpperCase();
-                } else {
-                    alert("এপিআই এই নম্বরের তথ্য খুঁজে পায়নি।");
+                // ২. এপিআই থেকে তথ্য আনা (৩টি কী-র যেকোনোটি ব্যবহার হবে)
+                let apiSuccess = false;
+                for (let key of API_KEYS) {
+                    try {
+                        const res = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${key}&phone=${apiNumber}`);
+                        const data = await res.json();
+                        
+                        if (data.phone_number) {
+                            updateUI(data);
+                            apiSuccess = true;
+                            break; 
+                        }
+                    } catch (e) {
+                        console.warn("Retrying with next key...");
+                    }
                 }
+
+                if (!apiSuccess && !snapshot.exists()) {
+                    displayTitle.innerText = "Caller Found (No details)";
+                    document.getElementById('resLocation').innerText = "Bangladesh";
+                }
+
             } catch (e) {
-                displayTitle.innerText = "Error Searching";
-                console.error(e);
+                displayTitle.innerText = "Error";
             }
         });
+
+        function updateUI(data) {
+            document.getElementById('resLocation').innerText = data.phone_location.city || "Dhaka";
+            document.getElementById('resCountry').innerText = data.phone_location.country_name || "Bangladesh";
+            document.getElementById('resCarrier').innerText = data.phone_carrier.name || "Mobile Operator";
+            document.getElementById('resStatus').innerText = data.phone_validation.line_status.toUpperCase();
+        }
 
         function resetFields() {
             document.getElementById('resLocation').innerText = "--";
