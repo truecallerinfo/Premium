@@ -3,64 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Truecaller Premium & Search</title>
+    <title>Truecaller Premium Clone</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .premium-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
-        .gold-badge { background: linear-gradient(45deg, #d4af37, #f9e27d, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .premium-gradient { background: linear-gradient(135deg, #0046ad 0%, #0082fb 100%); }
+        .gold-text { background: linear-gradient(45deg, #d4af37, #f9e27d, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
     </style>
 </head>
-<body class="bg-slate-50 font-sans">
+<body class="bg-gray-50 font-sans">
 
-    <nav class="bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-50">
+    <nav class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center space-x-2">
-            <div class="bg-blue-600 p-2 rounded-lg"><i class="fa-solid fa-phone text-white"></i></div>
-            <span class="text-xl font-bold text-blue-800">Truecaller <span class="text-blue-500">Premium</span></span>
+            <div class="bg-blue-600 p-2 rounded-xl">
+                <i class="fa-solid fa-phone-volume text-white text-xl"></i>
+            </div>
+            <span class="text-2xl font-black text-blue-900 tracking-tight">TRUECALLER <span class="text-blue-500 font-light">PRO</span></span>
         </div>
-        <button id="loginBtn" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition">Login with Google</button>
+        <button id="loginBtn" class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 shadow-lg transition-all active:scale-95">
+            <i class="fa-brands fa-google mr-2"></i> Login
+        </button>
     </nav>
 
-    <div class="max-w-4xl mx-auto mt-10 px-6">
-        <div class="bg-white p-6 rounded-3xl shadow-xl border border-blue-100">
-            <h2 class="text-2xl font-bold text-center text-slate-800 mb-6">Search Any Number</h2>
-            <div class="flex flex-col md:flex-row gap-3">
-                <input type="text" id="searchInput" placeholder="Enter phone number (e.g. 017...)" class="flex-1 p-4 border-2 border-slate-200 rounded-2xl focus:border-blue-500 outline-none transition">
-                <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-700 transition"><i class="fa-solid fa-magnifying-glass mr-2"></i> Search</button>
-            </div>
-            <div id="resultArea" class="mt-8 hidden p-6 bg-blue-50 rounded-2xl border-l-8 border-blue-600">
-                <h4 class="text-slate-500 uppercase text-xs font-bold tracking-widest">Caller Identity Found</h4>
-                <p id="callerName" class="text-3xl font-black text-blue-900 mt-2">Unknown User</p>
-                <p id="callerType" class="text-blue-600 font-medium mt-1">Spam Level: Safe</p>
+    <header class="premium-gradient py-16 px-6 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4">Search Caller Identity</h1>
+        <p class="text-blue-100 mb-10 text-lg">বিশ্বের সবচেয়ে বড় কমিউনিটি ডাটাবেস থেকে নম্বর খুঁজে বের করুন।</p>
+        
+        <div class="max-w-3xl mx-auto relative">
+            <div class="flex items-center bg-white rounded-2xl shadow-2xl overflow-hidden p-2">
+                <i class="fa-solid fa-search text-gray-400 ml-4"></i>
+                <input type="text" id="searchInput" placeholder="Enter phone number..." class="w-full p-4 text-gray-800 outline-none text-lg" />
+                <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition">Search</button>
             </div>
         </div>
-    </div>
 
-    <main class="max-w-6xl mx-auto py-12 px-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <i class="fa-solid fa-shield-halved text-3xl text-blue-600 mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">Spam Blocking</h3>
-                <p class="text-slate-600 text-sm">অটোমেটিক স্প্যাম আইডেন্টিফিকেশন সিস্টেম।</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <i class="fa-solid fa-eye text-3xl text-blue-600 mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">Who Viewed Me</h3>
-                <p class="text-slate-600 text-sm">জানুন কে আপনার প্রোফাইল দেখছে।</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <i class="fa-solid fa-star gold-badge text-3xl mb-4"></i>
-                <h3 class="text-xl font-bold mb-2 gold-badge">Premium Badge</h3>
-                <p class="text-slate-600 text-sm">নিজের প্রোফাইলে প্রিমিয়াম লুক আনুন।</p>
+        <div id="resultArea" class="max-w-lg mx-auto mt-8 hidden transform transition-all scale-100">
+            <div class="glass-card p-6 rounded-3xl shadow-2xl text-left border-t-4 border-blue-500">
+                <span class="text-blue-600 text-xs font-bold uppercase tracking-widest">Verified Identity</span>
+                <h2 id="callerName" class="text-3xl font-black text-gray-900 mt-1">Searching...</h2>
+                <div class="flex items-center mt-3 text-gray-600">
+                    <i class="fa-solid fa-location-dot mr-2"></i>
+                    <span>Bangladesh</span>
+                </div>
             </div>
         </div>
-    </main>
+    </header>
+
+    <section class="max-w-6xl mx-auto py-20 px-6">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Exclusive Premium Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-shield-virus text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Advance Spam Blocking</h3>
+                <p class="text-gray-600 text-sm">অটোমেটিক স্প্যাম এবং ফ্রড কল ব্লক করে আপনাকে রাখে নিরাপদ।</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-eye text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Who Viewed My Profile</h3>
+                <p class="text-gray-600 text-sm">আপনার প্রোফাইল কে কে চেক করেছে তার তাৎক্ষণিক নোটিফিকেশন পান।</p>
+            </div>
+
+            <div class="bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-800 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-yellow-500/20 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-crown text-2xl text-yellow-500"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3 gold-text">Gold Caller ID</h3>
+                <p class="text-gray-400 text-sm">কল করার সময় অন্যদের ফোনে আপনার নাম গোল্ড কালারে দেখা যাবে।</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-record-vinyl text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Cloud Call Recording</h3>
+                <p class="text-gray-600 text-sm">গুরুত্বপূর্ণ কলগুলো অটোমেটিক রেকর্ড এবং ক্লাউডে সেভ করার সুবিধা।</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-ban text-2xl text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">No Advertisements</h3>
+                <p class="text-gray-600 text-sm">বিরক্তিহীন অভিজ্ঞতার জন্য কোনো প্রকার বিজ্ঞাপন থাকবে না।</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition">
+                <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fa-solid fa-ghost text-2xl text-orange-600"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Ghost Call</h3>
+                <p class="text-gray-600 text-sm">যেকোনো সময় ফেক কল শিডিউল করে অস্বস্তিকর পরিস্থিতি এড়িয়ে চলুন।</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-gray-200 py-10 text-center">
+        <p class="text-gray-500 text-sm italic font-medium">Designed for Educational Purposes | © 2026 Md. Dulal Hosen</p>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+        // Your Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDyzEWR2Bct6EkSBQTLCvkHi4Vzb7oasy4",
             authDomain: "truecaller-98603.firebaseapp.com",
@@ -71,41 +125,46 @@
             databaseURL: "https://truecaller-98603-default-rtdb.firebaseio.com"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
         const provider = new GoogleAuthProvider();
 
-        // Login Logic
+        // UI Elements
         const loginBtn = document.getElementById('loginBtn');
-        loginBtn.addEventListener('click', () => {
-            signInWithPopup(auth, provider).then((result) => {
-                loginBtn.innerText = result.user.displayName;
-                alert("Logged in successfully!");
-            });
-        });
-
-        // Search Logic
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
         const resultArea = document.getElementById('resultArea');
         const callerName = document.getElementById('callerName');
 
+        // 1. Google Login Logic
+        loginBtn.addEventListener('click', () => {
+            signInWithPopup(auth, provider).then((result) => {
+                const user = result.user;
+                loginBtn.innerHTML = `<img src="${user.photoURL}" class="w-6 h-6 rounded-full inline mr-2"> ${user.displayName}`;
+                alert("Login Successful, Welcome " + user.displayName);
+            }).catch((err) => alert(err.message));
+        });
+
+        // 2. Search Functionality
         searchBtn.addEventListener('click', () => {
             const number = searchInput.value.trim();
-            if(!number) return alert("Please enter a number");
+            if (!number) return alert("Please enter a phone number!");
+
+            resultArea.classList.remove('hidden');
+            callerName.innerText = "Searching...";
 
             const dbRef = ref(db);
             get(child(dbRef, `numbers/${number}`)).then((snapshot) => {
-                resultArea.classList.remove('hidden');
                 if (snapshot.exists()) {
                     callerName.innerText = snapshot.val().name;
                 } else {
-                    callerName.innerText = "No Name Found";
+                    callerName.innerText = "Unknown Caller";
                 }
             }).catch((error) => {
                 console.error(error);
-                alert("Error searching number");
+                alert("Database search error!");
             });
         });
     </script>
