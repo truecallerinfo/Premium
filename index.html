@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Number Search</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#0f172a;
+  font-family:Arial;
+  color:white;
+  padding:20px;
+}
+
+.container{
+  max-width:500px;
+  margin:auto;
+}
+
+.card{
+  background:#1e293b;
+  padding:20px;
+  border-radius:20px;
+  margin-top:20px;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  margin-top:10px;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  margin-top:10px;
+  border:none;
+  border-radius:12px;
+  background:#38bdf8;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.item{
+  margin-top:15px;
+  padding:15px;
+  background:#334155;
+  border-radius:12px;
+}
+
+.label{
+  color:#94a3b8;
+  font-size:14px;
+}
+
+.value{
+  margin-top:5px;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.green{
+  color:#22c55e;
+}
+
+.red{
+  color:#ef4444;
+}
+
+.yellow{
+  color:#facc15;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>📞 Number Search</h1>
+
+<input
+type="text"
+id="phone"
+placeholder="Enter phone number">
+
+<button onclick="searchNumber()">
+Search Number
+</button>
+
+</div>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+async function searchNumber(){
+
+const phone =
+document.getElementById("phone").value;
+
+const result =
+document.getElementById("result");
+
+result.innerHTML =
+"<div class='card'>Searching...</div>";
+
+/*
+Replace this with your real API
+*/
+
+const data = {
+    "phone_number": "14152007986",
+    "phone_format": {
+        "international": "+1 415-200-7986",
+        "national": "(415) 200-7986"
+    },
+    "phone_carrier": {
+        "name": "T-mobile USA Inc.",
+        "line_type": "mobile"
+    },
+    "phone_location": {
+        "country_name": "United States",
+        "region": "San Francisco",
+        "city": "California",
+        "timezone": "America/Los_Angeles"
+    },
+    "phone_validation": {
+        "is_valid": true,
+        "line_status": "active",
+        "is_voip": false
+    },
+    "phone_risk": {
+        "risk_level": "low",
+        "is_disposable": false
+    }
+};
+
+result.innerHTML = `
+
+<div class="card">
+
+<div class="item">
+<div class="label">Phone Number</div>
+<div class="value">
+${data.phone_format.international}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Carrier</div>
+<div class="value">
+${data.phone_carrier.name}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Line Type</div>
+<div class="value">
+${data.phone_carrier.line_type}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Country</div>
+<div class="value">
+${data.phone_location.country_name}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Region</div>
+<div class="value">
+${data.phone_location.region}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Timezone</div>
+<div class="value">
+${data.phone_location.timezone}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Number Status</div>
+<div class="value green">
+${data.phone_validation.line_status}
+</div>
+</div>
+
+<div class="item">
+<div class="label">VOIP</div>
+<div class="value">
+${data.phone_validation.is_voip}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Risk Level</div>
+<div class="value yellow">
+${data.phone_risk.risk_level}
+</div>
+</div>
+
+<div class="item">
+<div class="label">Disposable</div>
+<div class="value red">
+${data.phone_risk.is_disposable}
+</div>
+</div>
+
+</div>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>
