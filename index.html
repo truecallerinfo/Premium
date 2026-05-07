@@ -1,40 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Truecaller Pro</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truecaller Premium & Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .premium-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .gold-badge { background: linear-gradient(45deg, #d4af37, #f9e27d, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 font-sans">
 
-<div class="container">
+    <nav class="bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-2">
+            <div class="bg-blue-600 p-2 rounded-lg"><i class="fa-solid fa-phone text-white"></i></div>
+            <span class="text-xl font-bold text-blue-800">Truecaller <span class="text-blue-500">Premium</span></span>
+        </div>
+        <button id="loginBtn" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition">Login with Google</button>
+    </nav>
 
-<h1>📞 Number Search Pro</h1>
+    <div class="max-w-4xl mx-auto mt-10 px-6">
+        <div class="bg-white p-6 rounded-3xl shadow-xl border border-blue-100">
+            <h2 class="text-2xl font-bold text-center text-slate-800 mb-6">Search Any Number</h2>
+            <div class="flex flex-col md:flex-row gap-3">
+                <input type="text" id="searchInput" placeholder="Enter phone number (e.g. 017...)" class="flex-1 p-4 border-2 border-slate-200 rounded-2xl focus:border-blue-500 outline-none transition">
+                <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-700 transition"><i class="fa-solid fa-magnifying-glass mr-2"></i> Search</button>
+            </div>
+            <div id="resultArea" class="mt-8 hidden p-6 bg-blue-50 rounded-2xl border-l-8 border-blue-600">
+                <h4 class="text-slate-500 uppercase text-xs font-bold tracking-widest">Caller Identity Found</h4>
+                <p id="callerName" class="text-3xl font-black text-blue-900 mt-2">Unknown User</p>
+                <p id="callerType" class="text-blue-600 font-medium mt-1">Spam Level: Safe</p>
+            </div>
+        </div>
+    </div>
 
-<input id="number" placeholder="Enter phone number">
-<button onclick="searchNumber()">Search</button>
+    <main class="max-w-6xl mx-auto py-12 px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <i class="fa-solid fa-shield-halved text-3xl text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Spam Blocking</h3>
+                <p class="text-slate-600 text-sm">অটোমেটিক স্প্যাম আইডেন্টিফিকেশন সিস্টেম।</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <i class="fa-solid fa-eye text-3xl text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Who Viewed Me</h3>
+                <p class="text-slate-600 text-sm">জানুন কে আপনার প্রোফাইল দেখছে।</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <i class="fa-solid fa-star gold-badge text-3xl mb-4"></i>
+                <h3 class="text-xl font-bold mb-2 gold-badge">Premium Badge</h3>
+                <p class="text-slate-600 text-sm">নিজের প্রোফাইলে প্রিমিয়াম লুক আনুন।</p>
+            </div>
+        </div>
+    </main>
 
-<div id="result"></div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-<hr>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyzEWR2Bct6EkSBQTLCvkHi4Vzb7oasy4",
+            authDomain: "truecaller-98603.firebaseapp.com",
+            projectId: "truecaller-98603",
+            storageBucket: "truecaller-98603.firebasestorage.app",
+            messagingSenderId: "594765579227",
+            appId: "1:594765579227:web:13db05082163fc3c371dfe",
+            databaseURL: "https://truecaller-98603-default-rtdb.firebaseio.com"
+        };
 
-<h3>⚠ Report Number</h3>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const provider = new GoogleAuthProvider();
 
-<input id="rnumber" placeholder="Number">
-<select id="rtype">
-<option>Spam</option>
-<option>Fraud</option>
-<option>Marketing</option>
-<option>Scam</option>
-</select>
+        // Login Logic
+        const loginBtn = document.getElementById('loginBtn');
+        loginBtn.addEventListener('click', () => {
+            signInWithPopup(auth, provider).then((result) => {
+                loginBtn.innerText = result.user.displayName;
+                alert("Logged in successfully!");
+            });
+        });
 
-<textarea id="rcomment" placeholder="Comment"></textarea>
+        // Search Logic
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInput = document.getElementById('searchInput');
+        const resultArea = document.getElementById('resultArea');
+        const callerName = document.getElementById('callerName');
 
-<button onclick="reportNumber()">Submit Report</button>
+        searchBtn.addEventListener('click', () => {
+            const number = searchInput.value.trim();
+            if(!number) return alert("Please enter a number");
 
-</div>
-
-<script type="module" src="app.js"></script>
-
+            const dbRef = ref(db);
+            get(child(dbRef, `numbers/${number}`)).then((snapshot) => {
+                resultArea.classList.remove('hidden');
+                if (snapshot.exists()) {
+                    callerName.innerText = snapshot.val().name;
+                } else {
+                    callerName.innerText = "No Name Found";
+                }
+            }).catch((error) => {
+                console.error(error);
+                alert("Error searching number");
+            });
+        });
+    </script>
 </body>
 </html>
