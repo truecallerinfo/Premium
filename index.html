@@ -75,7 +75,7 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // আপনার Firebase কনফিগারেশন
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDyzEWR2Bct6EkSBQTLCvkHi4Vzb7oasy4",
             authDomain: "truecaller-98603.firebaseapp.com",
@@ -92,7 +92,7 @@
         const provider = new GoogleAuthProvider();
 
         // আপনার নতুন জেনারেট করা Truecaller App Key
-        const TRUECALLER_KEY = "9GNiG9e3d5a5077274b74ae147fb52e2ae190";
+        const TRUECALLER_KEY = "9GNiG9e3d5a5077274b74ae147fb52e2ae190"; 
 
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
@@ -103,7 +103,7 @@
             let rawNumber = searchInput.value.trim().replace(/\+/g, '').replace(/\s/g, '');
             if (!rawNumber) return alert("Please enter a phone number");
 
-            // এপিআই-এর জন্য নম্বর ফরম্যাট করা (88 যোগ করা)
+            // নম্বর ফরম্যাটিং
             let apiNumber = rawNumber;
             if (apiNumber.startsWith('0')) apiNumber = '88' + apiNumber;
             else if (!apiNumber.startsWith('88')) apiNumber = '88' + apiNumber;
@@ -113,7 +113,7 @@
             resetFields();
 
             try {
-                // ১. Firebase ডাটাবেস চেক (আপনার সেভ করা নামগুলো আগে দেখাবে)
+                // ১. Firebase ডাটাবেস চেক
                 const dbRef = ref(db);
                 const snapshot = await get(child(dbRef, `numbers/${rawNumber}`));
                 
@@ -123,13 +123,12 @@
                     displayTitle.innerText = foundName;
                 }
 
-                // ২. Truecaller / Abstract API-তে সার্চ করা
+                // ২. কলার আইডি সার্চ (Abstract API এর মাধ্যমে আপনার ট্রুকলার কি ব্যবহার করে)
                 const res = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${TRUECALLER_KEY}&phone=${apiNumber}`);
                 const data = await res.json();
                 
                 if (data.phone_number) {
                     updateUI(data);
-                    // যদি ডাটাবেসে নাম না থাকে, তবে এপিআই-এর তথ্য অনুযায়ী টাইটেল দেখাবে
                     if (!foundName) {
                         displayTitle.innerText = data.phone_carrier.name + " User";
                     }
