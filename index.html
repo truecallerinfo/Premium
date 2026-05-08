@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Truecaller Global Pro - Premium Intel</title>
+    <title>Truecaller Global Pro - Smart Intel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .premium-gradient { background: linear-gradient(135deg, #0046ad 0%, #0082fb 100%); }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid #e2e8f0; transition: all 0.4s ease; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid #e2e8f0; }
         .data-label { font-size: 0.7rem; font-weight: bold; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
         .data-value { font-size: 1rem; font-weight: 600; color: #1e293b; }
-        .identifying-anim { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        .identifying-text { animation: pulse 1.5s infinite; color: #3b82f6; font-weight: 900; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body class="bg-slate-50 font-sans">
@@ -22,47 +22,40 @@
             <div class="bg-blue-600 p-2 rounded-xl text-white"><i class="fa-solid fa-phone"></i></div>
             <span class="text-xl font-black text-blue-900 tracking-tighter uppercase">Truecaller <span class="text-blue-500">Intel</span></span>
         </div>
-        <button id="loginBtn" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-blue-700 transition shadow-lg">Login</button>
+        <button id="loginBtn" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-blue-700 transition">Login</button>
     </nav>
 
     <header class="premium-gradient py-16 px-6 text-center text-white">
         <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tight">SMART CALLER ID</h1>
-        <p class="text-blue-100 mb-10 max-w-xl mx-auto text-lg font-light">Experience the power of Hybrid Data Search with Firebase & Truecaller SDK.</p>
+        <p class="text-blue-100 mb-10 max-w-xl mx-auto font-light">Firebase এবং Truecaller SDK-এর সমন্বয়ে হাইব্রিড ডাটা সার্চ।</p>
         
         <div class="max-w-2xl mx-auto flex bg-white rounded-2xl shadow-2xl p-2 overflow-hidden ring-4 ring-blue-400/20">
-            <input type="text" id="searchInput" placeholder="Enter mobile number (e.g. 017...)" 
-                   class="w-full p-4 text-gray-800 outline-none font-bold text-lg" />
-            <button id="searchBtn" class="bg-blue-600 text-white px-10 py-4 rounded-xl font-black hover:bg-blue-700 transition-all active:scale-95 shadow-inner">
-                SEARCH
-            </button>
+            <input type="text" id="searchInput" placeholder="Enter number (e.g. 017...)" class="w-full p-4 text-gray-800 outline-none font-bold text-lg" />
+            <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-black hover:bg-blue-700 transition active:scale-95">SEARCH</button>
         </div>
 
         <div id="resultArea" class="max-w-lg mx-auto mt-12 hidden text-left">
-            <div class="glass-card p-8 rounded-[2rem] shadow-2xl border-t-[10px] border-blue-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4">
-                    <span class="bg-blue-100 text-blue-600 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ring-1 ring-blue-200">Verified Database</span>
-                </div>
-                
+            <div class="glass-card p-8 rounded-[2.5rem] shadow-2xl border-t-[10px] border-blue-600">
                 <div class="mb-8">
                     <p class="data-label mb-1">Identified Name</p>
-                    <h2 id="displayTitle" class="text-3xl font-black text-slate-900 leading-tight uppercase">Searching...</h2>
+                    <h2 id="displayTitle" class="text-3xl font-black text-slate-900 uppercase">Identifying...</h2>
                 </div>
 
                 <div class="grid grid-cols-2 gap-5">
-                    <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
-                        <p class="data-label"><i class="fa-solid fa-location-dot mr-1"></i> Location</p>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p class="data-label"><i class="fa-solid fa-location-dot"></i> Location</p>
                         <p id="resLocation" class="data-value">--</p>
                     </div>
-                    <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
-                        <p class="data-label"><i class="fa-solid fa-signal mr-1"></i> Carrier</p>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p class="data-label"><i class="fa-solid fa-signal"></i> Carrier</p>
                         <p id="resCarrier" class="data-value">--</p>
                     </div>
-                    <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
-                        <p class="data-label"><i class="fa-solid fa-globe mr-1"></i> Country</p>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p class="data-label"><i class="fa-solid fa-globe"></i> Country</p>
                         <p id="resCountry" class="data-value">--</p>
                     </div>
-                    <div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
-                        <p class="data-label"><i class="fa-solid fa-shield mr-1"></i> Status</p>
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p class="data-label"><i class="fa-solid fa-shield"></i> Status</p>
                         <p id="resStatus" class="data-value">--</p>
                     </div>
                 </div>
@@ -70,8 +63,8 @@
         </div>
     </header>
 
-    <footer class="mt-20 py-8 text-center">
-        <p class="text-slate-400 text-[11px] font-bold uppercase tracking-[0.3em]">© 2026 MD DULAL HOSAN | Hybrid Intelligence System</p>
+    <footer class="mt-20 py-8 text-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">
+        © 2026 MD DULAL HOSAN | Hybrid Intelligence System
     </footer>
 
     <script type="module">
@@ -79,7 +72,6 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDyzEWR2Bct6EkSBQTLCvkHi4Vzb7oasy4",
             authDomain: "truecaller-98603.firebaseapp.com",
@@ -95,8 +87,7 @@
         const db = getDatabase(app);
         const provider = new GoogleAuthProvider();
 
-        // Your Updated Truecaller App Key (cite: 1000003905.jpg)
-        const TRUECALLER_KEY = "9GNiG9e3d5a5077274b74ae147fb52e2ae190"; 
+        const APP_KEY = "9GNiG9e3d5a5077274b74ae147fb52e2ae190";
 
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
@@ -104,64 +95,48 @@
         const displayTitle = document.getElementById('displayTitle');
 
         searchBtn.addEventListener('click', async () => {
-            let num = searchInput.value.trim().replace(/\+/g, '').replace(/\s/g, '');
-            if (!num) return alert("Please enter a valid phone number");
+            let num = searchInput.value.trim().replace(/\s/g, '');
+            if (!num) return alert("Please enter a number");
 
-            // Standardize format to 88...
-            let apiNum = num;
-            if (apiNum.startsWith('0')) apiNum = '88' + apiNum;
-            else if (!apiNum.startsWith('88')) apiNum = '88' + apiNum;
+            let apiNum = num.startsWith('0') ? '88' + num : num;
 
-            // UI Reset & Start
             resultArea.classList.remove('hidden');
             displayTitle.innerText = "IDENTIFYING...";
-            displayTitle.classList.add('identifying-anim');
+            displayTitle.classList.add('identifying-text');
             resetFields();
 
             try {
-                // 1. Check Local Firebase First
+                // ১. Firebase ডাটাবেস চেক
                 const dbRef = ref(db);
                 const snapshot = await get(child(dbRef, `numbers/${num}`));
-                
-                let localName = null;
-                if (snapshot.exists()) {
-                    localName = snapshot.val().name;
-                    displayTitle.innerText = localName;
-                    displayTitle.classList.remove('identifying-anim');
-                }
+                let foundName = snapshot.exists() ? snapshot.val().name : null;
 
-                // 2. Fetch from Truecaller Intelligence (via Abstract API)
-                const res = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${TRUECALLER_KEY}&phone=${apiNum}`);
+                // ২. এপিআই কল
+                const res = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${APP_KEY}&phone=${apiNum}`);
                 const data = await res.json();
                 
-                if (data.phone_number) {
-                    updateUI(data);
-                    if (!localName) {
-                        displayTitle.innerText = data.phone_carrier.name + " USER";
-                        displayTitle.classList.remove('identifying-anim');
-                    }
+                displayTitle.classList.remove('identifying-text');
+
+                if (foundName) {
+                    displayTitle.innerText = foundName;
+                } else if (data.phone_number) {
+                    displayTitle.innerText = data.phone_carrier.name + " USER";
                 } else {
-                    if (!localName) {
-                        displayTitle.innerText = "CALLER FOUND (NO NAME)";
-                        displayTitle.classList.remove('identifying-anim');
-                    }
+                    displayTitle.innerText = "CALLER FOUND (NO NAME)";
+                }
+
+                if (data.phone_number) {
+                    document.getElementById('resLocation').innerText = data.phone_location.city || "BANGLADESH";
+                    document.getElementById('resCountry').innerText = data.phone_location.country_name || "BANGLADESH";
+                    document.getElementById('resCarrier').innerText = data.phone_carrier.name || "OPERATOR";
+                    document.getElementById('resStatus').innerText = data.phone_validation.line_status.toUpperCase();
                 }
 
             } catch (e) {
-                console.error("Search Error:", e);
-                if (!displayTitle.innerText.includes("USER")) {
-                    displayTitle.innerText = "UNKNOWN CALLER";
-                    displayTitle.classList.remove('identifying-anim');
-                }
+                displayTitle.innerText = "UNKNOWN CALLER";
+                displayTitle.classList.remove('identifying-text');
             }
         });
-
-        function updateUI(data) {
-            document.getElementById('resLocation').innerText = data.phone_location.city || "BANGLADESH";
-            document.getElementById('resCountry').innerText = data.phone_location.country_name || "BANGLADESH";
-            document.getElementById('resCarrier').innerText = data.phone_carrier.name || "OPERATOR";
-            document.getElementById('resStatus').innerText = data.phone_validation.line_status.toUpperCase();
-        }
 
         function resetFields() {
             document.getElementById('resLocation').innerText = "--";
@@ -170,11 +145,10 @@
             document.getElementById('resStatus').innerText = "--";
         }
 
-        // Google Login
         document.getElementById('loginBtn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).then((res) => {
+            signInWithPopup(auth, provider).then(res => {
                 document.getElementById('loginBtn').innerText = res.user.displayName;
-            }).catch(err => console.log(err));
+            });
         });
     </script>
 </body>
