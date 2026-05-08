@@ -11,8 +11,6 @@
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid #e2e8f0; }
         .data-label { font-size: 0.7rem; font-weight: bold; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
         .data-value { font-size: 1rem; font-weight: 600; color: #1e293b; }
-        .search-container { transition: all 0.3s ease; }
-        .search-container:focus-within { transform: translateY(-2px); }
     </style>
 </head>
 <body class="bg-slate-50 font-sans">
@@ -29,7 +27,7 @@
         <h1 class="text-3xl md:text-5xl font-bold mb-4">Smart Caller ID</h1>
         <p class="text-blue-100 mb-8 max-w-xl mx-auto italic">Firebase এবং Truecaller SDK-এর সমন্বয়ে হাইব্রিড ডাটা সার্চ।</p>
         
-        <div class="max-w-2xl mx-auto flex bg-white rounded-2xl shadow-2xl p-2 overflow-hidden search-container">
+        <div class="max-w-2xl mx-auto flex bg-white rounded-2xl shadow-2xl p-2 overflow-hidden">
             <input type="text" id="searchInput" placeholder="Enter number (e.g. 017...)" class="w-full p-4 text-gray-800 outline-none font-medium" />
             <button id="searchBtn" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition">Search</button>
         </div>
@@ -39,7 +37,7 @@
                 <div class="mb-6 flex justify-between items-start">
                     <div>
                         <p class="data-label">Identified Name</p>
-                        <h2 id="displayTitle" class="text-2xl font-black text-slate-900">Identifying...</h2>
+                        <h2 id="displayTitle" class="text-2xl font-black text-slate-900 uppercase">Caller Found (No Name)</h2>
                     </div>
                     <div class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Verified</div>
                 </div>
@@ -75,7 +73,7 @@
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Firebase Configuration
+        // Firebase Configuration (From project setup)
         const firebaseConfig = {
             apiKey: "AIzaSyDyzEWR2Bct6EkSBQTLCvkHi4Vzb7oasy4",
             authDomain: "truecaller-98603.firebaseapp.com",
@@ -91,8 +89,8 @@
         const db = getDatabase(app);
         const provider = new GoogleAuthProvider();
 
-        // আপনার নতুন জেনারেট করা Truecaller App Key
-        const TRUECALLER_KEY = "9GNiG9e3d5a5077274b74ae147fb52e2ae190"; 
+        // আপনার নতুন Truecaller App Key
+        const TRUECALLER_APP_KEY = "9GNiG9e3d5a5077274b74ae147fb52e2ae190";
 
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
@@ -100,72 +98,48 @@
         const displayTitle = document.getElementById('displayTitle');
 
         searchBtn.addEventListener('click', async () => {
-            let rawNumber = searchInput.value.trim().replace(/\+/g, '').replace(/\s/g, '');
-            if (!rawNumber) return alert("Please enter a phone number");
-
-            // নম্বর ফরম্যাটিং
-            let apiNumber = rawNumber;
-            if (apiNumber.startsWith('0')) apiNumber = '88' + apiNumber;
-            else if (!apiNumber.startsWith('88')) apiNumber = '88' + apiNumber;
+            const number = searchInput.value.trim();
+            if (!number) return alert("Please enter a phone number");
 
             resultArea.classList.remove('hidden');
-            displayTitle.innerText = "Searching...";
-            resetFields();
+            displayTitle.innerText = "Identifying...";
 
             try {
-                // ১. Firebase ডাটাবেস চেক
+                // ১. Firebase ডাটাবেস চেক (যদি আগে থেকে সেভ থাকে)
                 const dbRef = ref(db);
-                const snapshot = await get(child(dbRef, `numbers/${rawNumber}`));
+                const snapshot = await get(child(dbRef, `numbers/${number}`));
                 
-                let foundName = null;
                 if (snapshot.exists()) {
-                    foundName = snapshot.val().name;
-                    displayTitle.innerText = foundName;
+                    displayTitle.innerText = snapshot.val().name;
                 }
 
-                // ২. কলার আইডি সার্চ (Abstract API এর মাধ্যমে আপনার ট্রুকলার কি ব্যবহার করে)
-                const res = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${TRUECALLER_KEY}&phone=${apiNumber}`);
-                const data = await res.json();
-                
+                // ২. Abstract API এর মাধ্যমে ফোন তথ্য সংগ্রহ (আপনার কী ব্যবহার করে)
+                // নোট: সরাসরি SDK এর বদলে সিকিউর ডাটা রিট্রিভালের জন্য এই মেথড কার্যকর
+                const apiRes = await fetch(`https://phoneintelligence.abstractapi.com/v1?api_key=${TRUECALLER_APP_KEY}&phone=88${number}`);
+                const data = await apiRes.json();
+
                 if (data.phone_number) {
-                    updateUI(data);
-                    if (!foundName) {
-                        displayTitle.innerText = data.phone_carrier.name + " User";
+                    document.getElementById('resLocation').innerText = data.phone_location.city || "Dhaka";
+                    document.getElementById('resCountry').innerText = data.phone_location.country_name || "Bangladesh";
+                    document.getElementById('resCarrier').innerText = data.phone_carrier.name || "Unknown";
+                    document.getElementById('resStatus').innerText = data.phone_validation.line_status.toUpperCase();
+                    
+                    if (!snapshot.exists()) {
+                        displayTitle.innerText = "Caller Found (No Name)";
                     }
-                } else {
-                    if (!foundName) displayTitle.innerText = "Caller Found (No Name)";
                 }
-
             } catch (e) {
+                displayTitle.innerText = "Search Failed";
                 console.error(e);
-                if (displayTitle.innerText === "Searching...") {
-                    displayTitle.innerText = "Unknown Caller";
-                }
             }
         });
 
-        function updateUI(data) {
-            document.getElementById('resLocation').innerText = data.phone_location.city || "Bangladesh";
-            document.getElementById('resCountry').innerText = data.phone_location.country_name || "Bangladesh";
-            document.getElementById('resCarrier').innerText = data.phone_carrier.name || "Mobile Operator";
-            document.getElementById('resStatus').innerText = data.phone_validation.line_status.toUpperCase();
-        }
-
-        function resetFields() {
-            document.getElementById('resLocation').innerText = "--";
-            document.getElementById('resCountry').innerText = "--";
-            document.getElementById('resCarrier').innerText = "--";
-            document.getElementById('resStatus').innerText = "--";
-        }
-
-        // Login Logic
+        // Login Functionality
         document.getElementById('loginBtn').addEventListener('click', () => {
             signInWithPopup(auth, provider).then((result) => {
                 document.getElementById('loginBtn').innerText = result.user.displayName;
-                alert("Welcome " + result.user.displayName);
-            }).catch((error) => {
-                console.error(error);
-            });
+                alert("Login Successful!");
+            }).catch(error => console.log(error));
         });
     </script>
 </body>
